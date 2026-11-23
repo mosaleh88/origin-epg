@@ -2,16 +2,23 @@ import fs from "fs";
 import zlib from "zlib";
 
 const EPG_SOURCES = [
-  "https://raw.githubusercontent.com/acidjesuz/EPGTalk/master/guide.xml.gz",
+  "https://epgshare01.online/epgshare01/epg_ripper_AE1.xml.gz",
+  "https://epgshare01.online/epgshare01/epg_ripper_BEIN1.xml.gz",
   "https://www.open-epg.com/files/egypt.xml.gz",
-  "https://epgshare01.online/epgshare01/epg_ripper_BEIN1.xml.gz"
+  "https://raw.githubusercontent.com/acidjesuz/EPGTalk/master/guide.xml.gz"
 ];
 
 function cleanKey(str) {
   if (!str) return "";
-  return str.toLowerCase()
-    .replace(/\.(ae|sa|eg|qa|kw|net|com|tv|org|uk|us)$/i, "")
+  let k = str.toLowerCase()
+    .replace(/\.(ae|sa|eg|qa|kw|net|com|tv|org|uk|us|bein|intl)$/i, "")
+    .replace(/_(ar|en|fr)$/i, "")
     .replace(/[^a-z0-9]/g, "");
+  return k;
+}
+
+function stripTags(k) {
+  return k.replace(/(fhd|hd|4k|sd|1080p|720p|hevc|vip)$/i, "");
 }
 
 function parseXmltvDate(raw) {
@@ -86,7 +93,14 @@ async function run() {
         const norm = cleanKey(chId);
         if (norm) {
           combined[norm] = entry;
-          if (norm.startsWith("osntv")) combined["osn" + norm.slice(5)] = entry;
+          const noTag = stripTags(norm);
+          if (noTag && noTag !== norm) combined[noTag] = entry;
+          if (norm.startsWith("osntv")) {
+            const shortOsn = "osn" + norm.slice(5);
+            combined[shortOsn] = entry;
+            const noTagOsn = stripTags(shortOsn);
+            if (noTagOsn && noTagOsn !== shortOsn) combined[noTagOsn] = entry;
+          }
         }
       }
     } catch (err) {
