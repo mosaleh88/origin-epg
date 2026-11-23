@@ -1,0 +1,9 @@
+{
+  "name": "origin-epg",
+  "version": "1.0.0",
+  "description": "Fast pre-parsed EPG provider for Stremio Origin",
+  "type": "module",
+  "scripts": {
+    "build": "node build-epg.mjs"
+  }
+}
