@@ -5,6 +5,7 @@ const EPG_SOURCES = [
   "https://epgshare01.online/epgshare01/epg_ripper_AE1.xml.gz",
   "https://epgshare01.online/epgshare01/epg_ripper_BEIN1.xml.gz",
   "https://www.open-epg.com/files/egypt.xml.gz",
+  "https://epg.pw/xmltv/epg.xml.gz",
   "https://raw.githubusercontent.com/acidjesuz/EPGTalk/master/guide.xml.gz"
 ];
 
